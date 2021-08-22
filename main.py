@@ -1,7 +1,7 @@
 import praw
 import csv
 import passwords
-
+import time
 
 def submissiontitle():
     for submission in reddit.subreddit("").top(limit=10):
@@ -100,21 +100,34 @@ def streamingcomments(x):
 
 # streamingcomments(x="politics")
 
-def streamingpost(x):
+def streamingpost(x,num):
     global reddit
     sub = reddit.subreddit(x)
     counter = 0
     for i in sub.stream.submissions():
         try:
-            print("--"*15)
-            counter = counter + 1
-            print(counter," this is the numeber")
-            print("title: ", i.title)
-            print("sub: ", i.subreddit)
-            print("over 18: ",i.over_18)
+            if counter !=10:
+                print("--"*20)
+                counter = counter + 1
+                print(counter," this is the numeber")
+                print("Title: ", i.title)
+                print("\n---Sub: ", i.subreddit)
+                print("Over 18: ",i.over_18)
+                print("Link: www.reddit.com",i.permalink)
+                print("Num comments: ", i.num_comments)
+                print("Views: ", i.view_count)
+                print("Is video: ",i.is_video)
+                print("Author: ",i.author)
+                print("Created: ",time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(i.created))) # comverts time to human readable
+                print("Is spoiler: ", i.spoiler)
+                print("\n---")
+
+            if counter == num:
+                print("\n\n-------------completed\nhave a good day man\n---\n")
+                break
         except Exception as e:
             print("passed")
             print(str(e))
             pass
 
-streamingpost(x="all")
+streamingpost(x="all",num=20) # pass in subreddit name and how many you want 

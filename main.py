@@ -3,6 +3,8 @@ import csv
 import passwords
 import time
 
+#  using praw to scape reddit
+
 def submissiontitle():
     for submission in reddit.subreddit("").top(limit=10):
         print("\n-------------------")

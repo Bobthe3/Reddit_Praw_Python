@@ -106,7 +106,7 @@ def streamingpost(x,num):
     counter = 0
     for i in sub.stream.submissions():
         try:
-            if counter !=10:
+            if counter !=num:
                 print("--"*20)
                 counter = counter + 1
                 print(counter," this is the numeber")

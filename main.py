@@ -98,20 +98,33 @@ def streamingcomments(x):
             print("passed")
             pass
 
-# streamingcomments(x="politics")
+# streamingcomments(x="all")
 
 def streamingpost(x,num):
     global reddit
     sub = reddit.subreddit(x)
+
+    titles =[]
+    times = []
+    ids = []
+    over_18 = []
+    link = []
+    subreddit = []
+    subscribers = []
     counter = 0
-    for i in sub.stream.submissions():
-        try:
-            if counter !=num:
+
+    delay = 3 # enter seconds
+    close_time = time.time() + delay
+
+    while True:
+        for i in sub.stream.submissions():
+            try:
                 print("--"*20)
-                counter = counter + 1
-                print(counter," this is the numeber")
+                print(counter)
+                counter = counter +1
                 print("Title: ", i.title)
-                print("\n---Sub: ", i.subreddit)
+                print("---\nSub: ", i.subreddit)
+                print("Subreddit-subs: ",i.subreddit_subscribers)
                 print("Over 18: ",i.over_18)
                 print("Link: www.reddit.com",i.permalink)
                 print("Num comments: ", i.num_comments)
@@ -121,13 +134,35 @@ def streamingpost(x,num):
                 print("Created: ",time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(i.created))) # comverts time to human readable
                 print("Is spoiler: ", i.spoiler)
                 print("\n---")
+                titles.append(i.title)
+                ids.append(i.id)
+                times.append(time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(i.created)))
+                over_18.append(i.over_18)
+                link.append(i.permalink)
+                subreddit.append(i.subreddit)
+                subscribers.append(i.subreddit_subscribers)
 
-            if counter == num:
+                if time.time()>close_time:
+                    break
+
+            except Exception as e:
+                print("passed")
+                print(str(e))
+                pass
+
+        if time.time()>close_time:
+            with open("boom.csv", 'w', encoding='UTF8') as f:
+                writer = csv.writer(f)
+                writer.writerow(titles)
+                writer.writerow(ids)
+                writer.writerow(times)
+                writer.writerow(over_18)
+                writer.writerow(link)
+                writer.writerow(subreddit)
+                writer.writerow(subscribers)
                 print("\n\n-------------completed\nhave a good day man\n---\n")
                 break
-        except Exception as e:
-            print("passed")
-            print(str(e))
-            pass
+            break
 
-streamingpost(x="all",num=20) # pass in subreddit name and how many you want 
+streamingpost(x="all",num=20) 
+#       # pass in subreddit name and how many you want 

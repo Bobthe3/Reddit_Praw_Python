@@ -13,6 +13,7 @@ def get_write_csv(x):
     titles =[]
     scores = []
     ids = []
+    times = []
     with open('boomtest.csv', 'w', encoding='UTF8') as f:
         writer = csv.writer(f)
         for i in reddit.subreddit(x).top(limit=5):   
@@ -43,32 +44,77 @@ reddit = praw.Reddit(
 
 subredditname = "all"
 listsubnames = ["funny","all"]
-print(subredditname)
+# print(subredditname)
 
 # get_write_csv(x=subredditname) # pass in the subreddit name and i will 
 
 sub = reddit.subreddit("pythontips")
 limits = sub.top(limit=1)
 
+def commentsfunc():
+    global reddit, limits
+    for i in limits: 
 
-for i in limits:
+        print(i.title)
+        print(i.score)
+        print(i.downs)
+        print(i.ups)
+        print(i.upvote_ratio)
+        print(i.view_count)
+        print(i.name)
+        print(i.subreddit)
 
-    print(i.title)
-    print(i.score)
-    print(i.downs)
-    print(i.ups)
-    print(i.comments)
 
-    comments = i.comments.list()
+        i.comments.replace_more(limit=0)
 
-    print("Parent id", i.parent())
-    print("comment id", i.id,"\n") 
-    for j in comments:
-        print(20*"-")
-        print(j.body)
-        if len(j.replies) > 0:
-            for h in j.replies:
-                print(">>", h.body)
+        for j in i.comments.list():
+            print(20*"-")
+            print(j.body)
+            print("Parent id", j.parent())
+            print("comment id", j.id,"\n") 
+            # if len(j.replies) > 0:
+            #     counter = 0
+            #     for h in j.replies:
+            #         counter=counter+1
+            #         print(">"*counter, h.body)
+            #         print("Parent id", h.parent())
+            #         print("comment id", h.id,"\n")
                      
 
+# commentsfunc() # runs func
 
+def streamingcomments(x):
+    global reddit
+    sub = reddit.subreddit(x)
+
+    for comment in sub.stream.comments():
+        try:
+            print("--"*15)
+            parentid = str(comment.parent())
+            orginal = reddit.comment(parentid)
+            print(parentid)
+            print(orginal.body,"\n")
+        except Exception as e:
+            print("passed")
+            pass
+
+# streamingcomments(x="politics")
+
+def streamingpost(x):
+    global reddit
+    sub = reddit.subreddit(x)
+    counter = 0
+    for i in sub.stream.submissions():
+        try:
+            print("--"*15)
+            counter = counter + 1
+            print(counter," this is the numeber")
+            print("title: ", i.title)
+            print("sub: ", i.subreddit)
+            print("over 18: ",i.over_18)
+        except Exception as e:
+            print("passed")
+            print(str(e))
+            pass
+
+streamingpost(x="all")

@@ -100,7 +100,7 @@ def streamingcomments(x):
 
 # streamingcomments(x="all")
 
-def streamingpost(x,num):
+def streamingpost(x,file_name,delay):
     global reddit
     sub = reddit.subreddit(x)
 
@@ -113,7 +113,6 @@ def streamingpost(x,num):
     subscribers = []
     counter = 0
 
-    delay = 3 # enter seconds
     close_time = time.time() + delay
 
     while True:
@@ -122,6 +121,7 @@ def streamingpost(x,num):
                 print("--"*20)
                 print(counter)
                 counter = counter +1
+
                 print("Title: ", i.title)
                 print("---\nSub: ", i.subreddit)
                 print("Subreddit-subs: ",i.subreddit_subscribers)
@@ -130,10 +130,11 @@ def streamingpost(x,num):
                 print("Num comments: ", i.num_comments)
                 print("Views: ", i.view_count)
                 print("Is video: ",i.is_video)
-                print("Author: ",i.author)
+                print("Author: u/",i.author)
                 print("Created: ",time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(i.created))) # comverts time to human readable
                 print("Is spoiler: ", i.spoiler)
                 print("\n---")
+
                 titles.append(i.title)
                 ids.append(i.id)
                 times.append(time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(i.created)))
@@ -151,7 +152,7 @@ def streamingpost(x,num):
                 pass
 
         if time.time()>close_time:
-            with open("boom.csv", 'w', encoding='UTF8') as f:
+            with open(file_name, 'w', encoding='UTF8') as f:
                 writer = csv.writer(f)
                 writer.writerow(titles)
                 writer.writerow(ids)
@@ -164,5 +165,7 @@ def streamingpost(x,num):
                 break
             break
 
-streamingpost(x="all",num=20) 
+streamingpost(x="all",file_name = "loppa.csv",delay = 3) 
 #       # pass in subreddit name and how many you want 
+#       delay is how many seconds u want if you put 3 seconds u get approx
+        # 100 posts

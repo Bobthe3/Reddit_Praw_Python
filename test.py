@@ -27,37 +27,37 @@ def dirthing():
         print(i.subreddit_subscribers)
         break
 
-dirthing()
+# dirthing()
 
 
-# def commentsfunc():
-#     global reddit, limits
-#     for i in limits: 
+def commentsfunc():
+    global reddit, limits
+    for i in limits: 
 
-#         print(i.title)
-#         print(i.score)
-#         print(i.downs)
-#         print(i.ups)
-#         print(i.upvote_ratio)
-#         print(i.view_count)
-#         print(i.name)
-#         print(i.subreddit)
+        print(i.title)
+        print(i.score)
+        print(i.downs)
+        print(i.ups)
+        print(i.upvote_ratio)
+        print(i.view_count)
+        print(i.name)
+        print(i.subreddit)
         
 
-#         i.comments.replace_more(limit=0)
+        i.comments.replace_more(limit=0)
 
-#         for j in i.comments.list():
-#             print(20*"-")
-#             print(j.body)
-#             print("Parent id", j.parent())
-#             print("comment id", j.id,"\n") 
-#             # if len(j.replies) > 0:
-#             #     counter = 0
-#             #     for h in j.replies:
-#             #         counter=counter+1
-#             #         print(">"*counter, h.body)
-#             #         print("Parent id", h.parent())
-#             #         print("comment id", h.id,"\n")
+        for j in i.comments.list():
+            print(20*"-")
+            print(j.body)
+            print("Parent id", j.parent())
+            print("comment id", j.id,"\n") 
+            # if len(j.replies) > 0:
+            #     counter = 0
+            #     for h in j.replies:
+            #         counter=counter+1
+            #         print(">"*counter, h.body)
+            #         print("Parent id", h.parent())
+            #         print("comment id", h.id,"\n")
                      
 # # commentsfunc() # runs func
 
@@ -150,3 +150,42 @@ def stream_csv(time_out,file_name,sub_name):
 #       ###bla bla
 #     if time.time()>close_time:
 #          break
+
+
+import pandas
+import csv
+import matplotlib
+
+def csvcleaner(name1,name2 = str("test.csv")):
+
+    df = pandas.read_csv(name1)
+    df = df.transpose() # needs to transpose so it looks clean
+    df.sort_values(by=[2], ascending=True)
+    df.to_csv(name2)
+    print("done\n\n\n\n\n-------")
+    print(df[2])
+    df.plot.pie(x=2, subplots=True)
+    return df
+
+csvcleaner("loppa.csv","test123.csv")
+
+
+
+# # importing python package
+# import pandas as pd
+  
+# # read contents of csv file
+# file = pd.read_csv("gfg.csv")
+# print("\nOriginal file:")
+# print(file) ------------
+  
+# # adding header
+# headerList = ['id', 'name', 'profession']
+  
+# # converting data frame to csv -------------
+# file.to_csv("gfg2.csv", header=headerList, index=False) -------------
+  
+# # display modified csv file
+# file2 = pd.read_csv("gfg2.csv")
+# print('\nModified file:')
+# print(file2)

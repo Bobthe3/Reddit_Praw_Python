@@ -15,96 +15,6 @@ reddit = praw.Reddit(
 )
 
 subredditname = "all"
-listsubnames = ["funny","all"]
-# print(subredditname)
-
-# get_write_csv(x=subredditname) # pass in the subreddit name and i will 
-
-sub = reddit.subreddit("pythontips")
-limits = sub.top(limit=1)
-
-
-
-def submissiontitle():
-    for submission in reddit.subreddit("").top(limit=10):
-        print("\n-------------------")
-        print(submission.title)
-        print("\n-------------------")
-
-def get_write_csv(x):
-    titles =[]
-    scores = []
-    ids = []
-    times = []
-    with open('boomtest.csv', 'w', encoding='UTF8') as f:
-        writer = csv.writer(f)
-        for i in reddit.subreddit(x).top(limit=5):   
-            scores.append(i.score)
-            titles.append(i.title)
-            ids.append(i.id)
-            print("--")
-        writer.writerow(titles)
-        writer.writerow(scores)
-        writer.writerow(ids)
-
-def dirthing():
-    global reddit
-    x = reddit.subreddit("pythontips").top(limit=1)
-    for i in x:
-        print(dir(x))
-        break
-
-def commentsfunc():
-    global reddit, limits
-    for i in limits: 
-
-        print(i.title)
-        print(i.score)
-        print(i.downs)
-        print(i.ups)
-        print(i.upvote_ratio)
-        print(i.view_count)
-        print(i.name)
-        print(i.subreddit)
-
-
-        i.comments.replace_more(limit=0)
-
-        for j in i.comments.list():
-            print(20*"-")
-            print(j.body)
-            print("Parent id", j.parent())
-            print("comment id", j.id,"\n") 
-            # if len(j.replies) > 0:
-            #     counter = 0
-            #     for h in j.replies:
-            #         counter=counter+1
-            #         print(">"*counter, h.body)
-            #         print("Parent id", h.parent())
-            #         print("comment id", h.id,"\n")
-                     
-# commentsfunc() # runs func
-
-def streamingcomments(x):
-    global reddit
-    sub = reddit.subreddit(x)
-
-    for comment in sub.stream.comments():
-        try:
-            print("--"*15)
-            parentid = str(comment.parent())
-            orginal = reddit.comment(id)
-            print(parentid)
-            print(orginal.body,"\n")
-        except Exception as e:
-            print("passed")
-            pass
-
-# streamingcomments(x="all")
-
-
-#####################################
-
 
 def streamingpost(x,file_name,delay):
     global reddit
@@ -197,18 +107,11 @@ def streamingpost(x,file_name,delay):
                 break
             break
   
-    return print("the percentage of nsfw",float(counter_18/counter))
+    return print("the percentage of nsfw: ",float(counter_18/counter))
 
 # streamingpost(x="all",file_name = "loppa.csv",delay = 5)
 
-
-#       # pass in subreddit name and how many you want 
-#       delay is how many seconds u want if you put 3 seconds u get approx
-        # 3 seconds = 100 posts
-        # 60 seconds = ~700 posts
-
-
-
-submission = reddit.submission(id="pga96k")
-print(submission.title)
-print(submission.score)
+# pass in subreddit name and how many you want 
+# delay is how many seconds u want if you put 3 seconds u get approx
+# 3 seconds = 100 posts
+# 60 seconds = ~700 posts

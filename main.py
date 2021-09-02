@@ -144,7 +144,6 @@ def streamingpost(x,file_name,delay):
                 print("Views: ", i.view_count)
                 print("Is video: ",i.is_video)
                 print("Author: u/",i.author)
-                print("Parent_id: ",i.parentid)
                 print("Created: ",time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(i.created))) # comverts time to human readable
                 print("Is spoiler: ", i.spoiler)
                 print("\n---")
@@ -175,31 +174,31 @@ def streamingpost(x,file_name,delay):
         if time.time()>close_time:
             with open(file_name, 'w', encoding='UTF8') as f:
                 writer = csv.writer(f)
-                writer.writerow(titles)
-                writer.writerow(ids)
-                writer.writerow(author)
-                writer.writerow(is_video)
-                writer.writerow(spoiler)
-                writer.writerow(times)
-                writer.writerow(over_18)
-                writer.writerow(link)
-                writer.writerow(subreddit)
-                writer.writerow(subscribers)
+                writer.writerows(titles)
+                writer.writerows(ids)
+                writer.writerows(author)
+                writer.writerows(is_video)
+                writer.writerows(spoiler)
+                writer.writerows(times)
+                writer.writerows(over_18)
+                writer.writerows(link)
+                writer.writerows(subreddit)
+                writer.writerows(subscribers)
                 f.close()
                 print("\n\n-------------completed\nhave a good day man\n---\n")
-                break 
+                break
             with open("counter.csv", 'w') as file1:
                 dw = csv.DictWriter(file1, delimiter=',', 
                         fieldnames=headers)
                 dw.writeheader()
-                file1.writerow(counter)
-                file1.writerow(counter_18)
+                file1.writerows(counter)
+                file1.writerows(counter_18)
                 break
             break
   
     return print("the percentage of nsfw",float(counter_18/counter))
 
-# streamingpost(x="all",file_name = "loppa.csv",delay = 5)
+streamingpost(x="all",file_name = "loppa.csv",delay = 2)
 
 
 #       # pass in subreddit name and how many you want 
@@ -208,7 +207,26 @@ def streamingpost(x,file_name,delay):
         # 60 seconds = ~700 posts
 
 
+import csv
 
-submission = reddit.submission(id="pga96k")
-print(submission.title)
-print(submission.score)
+def time_search(delay,file_name1):
+    global reddit
+
+    close_time = time.time() + delay
+    with open(file_name1, 'r') as read_obj:
+        csv_reader = csv.reader(read_obj)
+        for row in csv_reader:
+            print(row)
+
+    while(True):
+        if time.time()>close_time:
+            submission = reddit.submission(id="pga96k")
+            print(submission.title)
+            print(submission.score)
+            break
+
+
+# enter the delay of how ling you want the posts to grow for 
+# enter csv name for the file wanted
+
+# time_search(delay=2,file_name1="loppa.csv")

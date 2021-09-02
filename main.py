@@ -174,8 +174,8 @@ def streamingpost(x,file_name,delay):
         if time.time()>close_time:
             with open(file_name, 'w', encoding='UTF8') as f:
                 writer = csv.writer(f)
-                writer.writerow(titles)
                 writer.writerow(ids)
+                writer.writerow(titles)
                 writer.writerow(author)
                 writer.writerow(is_video)
                 writer.writerow(spoiler)
@@ -187,18 +187,11 @@ def streamingpost(x,file_name,delay):
                 f.close()
                 print("\n\n-------------completed\nhave a good day man\n---\n")
                 break
-            with open("counter.csv", 'w') as file1:
-                dw = csv.DictWriter(file1, delimiter=',', 
-                        fieldnames=headers)
-                dw.writeheader()
-                file1.writerows(counter)
-                file1.writerows(counter_18)
-                break
+            print("donewefdfcf")
             break
-  
-    return print("the percentage of nsfw",float(counter_18/counter))
+    return print("the percentage of nsfw",float(counter_18/counter),"-------------\n\n")
 
-streamingpost(x="all",file_name = "loppa.csv",delay = 2)
+# streamingpost(x="all",file_name = "loppa.csv",delay = 2)
 
 
 #       # pass in subreddit name and how many you want 
@@ -209,24 +202,44 @@ streamingpost(x="all",file_name = "loppa.csv",delay = 2)
 
 import csv
 
-def time_search(delay,file_name1):
+def time_search(file_name1):
     global reddit
 
-    close_time = time.time() + delay
+    parent_ids = []
+    counter = 0
+
     with open(file_name1, 'r') as read_obj:
         csv_reader = csv.reader(read_obj)
-        for row in csv_reader:
-            print(row)
+        for i in csv_reader:
+            parent_ids.append(i[counter])
+            counter=counter+1
+            print(counter,i)
+            # this is not working it is making the whole thing into a list
+            # i need only the string of the id
+            # need to find a way to parse it, and get rid of all other data that ---
+            # is not needed. 
 
     while(True):
-        if time.time()>close_time:
-            submission = reddit.submission(id="pga96k")
-            print(submission.title)
-            print(submission.score)
-            break
+
+        for i in parent_ids:
+            print(i)
+            try:
+                submission = reddit.submission(id=i)
+                print("\n\n----------------")
+                print(submission.title)
+                print(submission.subreddit)
+                print(submission.permalink)
+                print("score: ",submission.score)
+                print(counter," ==  counter number")
+                print("\n\n-----------------")
+            except Exception as e:
+                print(e)
+                print(str(e))
+                pass
+        break
 
 
 # enter the delay of how ling you want the posts to grow for 
 # enter csv name for the file wanted
 
-# time_search(delay=2,file_name1="loppa.csv")
+time_search(file_name1="loppa.csv")

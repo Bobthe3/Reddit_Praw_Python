@@ -194,7 +194,7 @@ def streamingpost(x,file_name,delay):
             break
     return print("the percentage of nsfw",float(counter_18/counter),"-------------\n\n")
 
-# streamingpost(x="all",file_name = "overnightrun.csv",delay = 25200)
+streamingpost(x="all",file_name = "loppa.csv",delay = 1)
 
 
 #       # pass in subreddit name and how many you want 
@@ -205,15 +205,16 @@ def streamingpost(x,file_name,delay):
 
 import csv
 from itertools import chain
-import datetime
+from datetime import datetime
 
-def time_search(file_name1):
+def time_search(file_name1,output_file):
     global reddit
 
     parent_ids = []
     scores = []
     ids=[]
-    times=[]
+    created_time = []
+    current_time = []
     counter = 0
 
     with open(file_name1, 'r') as read_obj:
@@ -221,10 +222,12 @@ def time_search(file_name1):
         for i in csv_reader:
             parent_ids.append(i)
             counter=counter+1
+            print(i)
             break
 
     print("\n\n\n\n")
     id_test = parent_ids[0]
+    print("check 1")
 
 # striping and cleaing the data
 # sub scriptiable with normal list notation list[0]
@@ -247,8 +250,8 @@ def time_search(file_name1):
                 print("\n")
 
                 ids.append(submission.id)
-                created_times.append(time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(submission.created)))
-                scores.append(submission.scor)
+                created_time.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(submission.created)))
+                scores.append(submission.score)
                 current_time.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 
@@ -256,7 +259,6 @@ def time_search(file_name1):
                 print(e)
                 print(str(e))
                 pass
-        break
 
         with open(output_file, 'w', encoding='UTF8') as f:
             writer = csv.writer(f, dialect="excel")
@@ -264,16 +266,13 @@ def time_search(file_name1):
             writer.writerow(scores)
             writer.writerow(created_time)
             writer.writerow(current_time)
-            
-
             f.close()
             print("\n\n-------------completed\nhave a good day man\n---\n")
             break
-        print("donewefdfcf")
         break
 
 
 # enter the delay of how ling you want the posts to grow for 
 # enter csv name for the file wanted
 
-time_search(file_name1="overnightrun.overnightrun.csv", output_file="overnightrun_export.csv")
+time_search(file_name1="loppa.csv", output_file="overnightrun_export.csv")

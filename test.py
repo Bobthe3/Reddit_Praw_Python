@@ -167,7 +167,7 @@ def csvcleaner(name1,name2 = str("test.csv")):
     df.plot.pie(x=2, subplots=True)
     return df
 
-csvcleaner("loppa.csv","test123.csv")
+# csvcleaner("loppa.csv","test123.csv")
 
 
 
@@ -189,3 +189,36 @@ csvcleaner("loppa.csv","test123.csv")
 # file2 = pd.read_csv("gfg2.csv")
 # print('\nModified file:')
 # print(file2)
+
+
+import numpy
+import sys
+def reader(file_name):
+    csv.field_size_limit(sys.maxsize)
+    global reddit
+
+    parent_ids = []
+    counter = 0
+
+
+    with open(file_name, 'r') as read_obj:
+        csv_reader = csv.reader(read_obj, delimiter="|")
+        for i in csv_reader:
+            parent_ids.append(i)
+            counter=counter+1
+
+    tempvar = [elem.strip("[]").split(',') for elem in parent_ids[0]]
+    clean_id = list(chain(*tempvar))
+
+    tempvar = [elem.strip("[]").split(',') for elem in parent_ids[9]]
+    clean_subs = list(chain(*tempvar))
+
+    for i in clean_id:
+        
+
+            
+    print(parent_ids)
+    print("\n\n\n----------------------------\n\n",counter)
+
+
+reader(file_name = "overnightrun.csv")

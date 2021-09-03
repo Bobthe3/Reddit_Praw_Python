@@ -115,3 +115,81 @@ def streamingpost(x,file_name,delay):
 # delay is how many seconds u want if you put 3 seconds u get approx
 # 3 seconds = 100 posts
 # 60 seconds = ~700 posts
+
+
+
+import csv
+from itertools import chain
+from datetime import datetime
+import sys
+
+
+def time_search(file_name1,output_file):
+    csv.field_size_limit(sys.maxsize)
+    global reddit
+
+    parent_ids = []
+    scores = []
+    ids=[]
+    created_time = []
+    current_time = []
+    counter = 0
+
+    with open(file_name1, 'r') as read_obj:
+        csv_reader = csv.reader(read_obj, delimiter="|")
+        for i in csv_reader:
+            parent_ids.append(i)
+            counter=counter+1
+            break
+
+    print("\n\n\n\n")
+    id_test = parent_ids[0]
+    print("Running, Runnin, Runnin")
+
+# striping and cleaing the data
+# sub scriptiable with normal list notation list[0]
+    tempvar = [elem.strip("[]").split(',') for elem in id_test]
+    clean_id = list(chain(*tempvar))
+
+
+    while(True):
+        for i in clean_id:
+            try:
+                submission = reddit.submission(id=i)
+                
+                print("\n\n----------------")
+                print(i)
+                print("Title: ",submission.title)
+                print("subreddit: ",submission.subreddit)
+                print("link: ",submission.permalink)
+                print("score: ",submission.score)
+                print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                print("\n")
+
+                ids.append(submission.id)
+                created_time.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(submission.created)))
+                scores.append(submission.score)
+                current_time.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+
+            except Exception as e:
+                print(e)
+                print(str(e))
+                pass
+
+        with open(output_file, 'w', encoding='UTF8') as f:
+            writer = csv.writer(f, dialect="excel")
+            writer.writerow(ids)
+            writer.writerow(scores)
+            writer.writerow(created_time)
+            writer.writerow(current_time)
+            f.close()
+            print("\n\n-------------completed\nhave a good day man\n---\n")
+            break
+        return print("counter: ", counter)
+
+
+# enter the csv input and output
+# enter csv name for the file wanted
+
+time_search(file_name1="overnightrun.csv", output_file="overnightrun_export.csv")

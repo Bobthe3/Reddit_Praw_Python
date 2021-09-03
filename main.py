@@ -121,6 +121,7 @@ def streamingpost(x,file_name,delay):
     author = []
     spoiler = []
     parentid =[]
+    scores = []
     counter = 0
     counter_18=0
 
@@ -177,7 +178,6 @@ def streamingpost(x,file_name,delay):
             with open(file_name, 'w', encoding='UTF8') as f:
                 writer = csv.writer(f, dialect="excel")
                 writer.writerow(ids)
-                print(type(ids))
                 writer.writerow(titles)
                 writer.writerow(author)
                 writer.writerow(is_video)
@@ -186,6 +186,7 @@ def streamingpost(x,file_name,delay):
                 writer.writerow(over_18)
                 writer.writerow(link)
                 writer.writerow(subreddit)
+                writer.writerow(scores)
                 writer.writerow(subscribers)
                 f.close()
                 print("\n\n-------------completed\nhave a good day man\n---\n")
@@ -194,7 +195,7 @@ def streamingpost(x,file_name,delay):
             break
     return print("the percentage of nsfw",float(counter_18/counter),"-------------\n\n")
 
-streamingpost(x="all",file_name = "loppa.csv",delay = 1)
+# streamingpost(x="all",file_name = "loppa.csv",delay = 1)
 
 
 #       # pass in subreddit name and how many you want 
@@ -206,8 +207,11 @@ streamingpost(x="all",file_name = "loppa.csv",delay = 1)
 import csv
 from itertools import chain
 from datetime import datetime
+import sys
+
 
 def time_search(file_name1,output_file):
+    csv.field_size_limit(sys.maxsize)
     global reddit
 
     parent_ids = []
@@ -215,6 +219,7 @@ def time_search(file_name1,output_file):
     ids=[]
     created_time = []
     current_time = []
+    subscribers =[]
     counter = 0
 
     with open(file_name1, 'r') as read_obj:
@@ -222,12 +227,11 @@ def time_search(file_name1,output_file):
         for i in csv_reader:
             parent_ids.append(i)
             counter=counter+1
-            print(i)
             break
 
     print("\n\n\n\n")
     id_test = parent_ids[0]
-    print("check 1")
+    print("Running, Runnin, Runnin")
 
 # striping and cleaing the data
 # sub scriptiable with normal list notation list[0]
@@ -253,6 +257,7 @@ def time_search(file_name1,output_file):
                 created_time.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(submission.created)))
                 scores.append(submission.score)
                 current_time.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                subscribers.append(i.subreddit_subscribers)
 
 
             except Exception as e:
@@ -266,13 +271,34 @@ def time_search(file_name1,output_file):
             writer.writerow(scores)
             writer.writerow(created_time)
             writer.writerow(current_time)
+            writer.writerow(subscribers)
             f.close()
             print("\n\n-------------completed\nhave a good day man\n---\n")
             break
-        break
+        return print("counter: ", counter)
 
 
-# enter the delay of how ling you want the posts to grow for 
+# enter the csv input and output
 # enter csv name for the file wanted
 
-time_search(file_name1="loppa.csv", output_file="overnightrun_export.csv")
+time_search(file_name1="overnightrun.csv", output_file="overnightrun_export.csv")
+
+
+
+# now working on research data and displaying it
+
+import numpy
+def reader(file_name):
+    csv.field_size_limit(sys.maxsize)
+    global reddit
+
+
+    with open(file_name1, 'r') as read_obj:
+        csv_reader = csv.reader(read_obj, delimiter="|")
+        for i in csv_reader:
+            parent_ids.append(i)
+            counter=counter+1
+            break
+
+
+reader(file_name = "overnightrun.csv")

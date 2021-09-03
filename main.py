@@ -123,12 +123,13 @@ def streamingpost(x,file_name,delay):
     parentid =[]
     counter = 0
     counter_18=0
-    headers = ['title','sub','sub subs','over_18','link','comments','view_count','is_video','author','time','spoiler']
 
+    headers = ['title','sub','sub subs','over_18','link','comments','view_count','is_video','author','time','spoiler']
 
     close_time = time.time() + delay
 
     while True:
+
         for i in sub.stream.submissions():
             try:
                 print("--"*20)
@@ -144,6 +145,7 @@ def streamingpost(x,file_name,delay):
                 print("Views: ", i.view_count)
                 print("Is video: ",i.is_video)
                 print("Author: u/",i.author)
+                print("Id: ",i.id)
                 print("Created: ",time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(i.created))) # comverts time to human readable
                 print("Is spoiler: ", i.spoiler)
                 print("\n---")
@@ -173,8 +175,9 @@ def streamingpost(x,file_name,delay):
 
         if time.time()>close_time:
             with open(file_name, 'w', encoding='UTF8') as f:
-                writer = csv.writer(f)
+                writer = csv.writer(f, dialect="excel")
                 writer.writerow(ids)
+                print(type(ids))
                 writer.writerow(titles)
                 writer.writerow(author)
                 writer.writerow(is_video)
@@ -201,6 +204,7 @@ def streamingpost(x,file_name,delay):
 
 
 import csv
+from itertools import chain
 
 def time_search(file_name1):
     global reddit
@@ -209,19 +213,23 @@ def time_search(file_name1):
     counter = 0
 
     with open(file_name1, 'r') as read_obj:
-        csv_reader = csv.reader(read_obj)
+        csv_reader = csv.reader(read_obj, delimiter="|")
         for i in csv_reader:
-            parent_ids.append(i[counter])
+            parent_ids.append(i)
             counter=counter+1
-            print(counter,i)
-            # this is not working it is making the whole thing into a list
-            # i need only the string of the id
-            # need to find a way to parse it, and get rid of all other data that ---
-            # is not needed. 
+
+    print("\n\n\n\n")
+    id_test = parent_ids[0]
+
+# striping and cleaing the data
+# sub scriptiable with normal list notation list[0]
+    tempvar = [elem.strip("[]").split(',') for elem in id_test]
+    clean_id = list(chain(*tempvar))
+
 
     while(True):
 
-        for i in parent_ids:
+        for i in clean_id:
             print(i)
             try:
                 submission = reddit.submission(id=i)

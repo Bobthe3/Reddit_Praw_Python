@@ -194,7 +194,7 @@ def streamingpost(x,file_name,delay):
             break
     return print("the percentage of nsfw",float(counter_18/counter),"-------------\n\n")
 
-# streamingpost(x="all",file_name = "loppa.csv",delay = 2)
+# streamingpost(x="all",file_name = "overnightrun.csv",delay = 25200)
 
 
 #       # pass in subreddit name and how many you want 
@@ -205,11 +205,15 @@ def streamingpost(x,file_name,delay):
 
 import csv
 from itertools import chain
+import datetime
 
 def time_search(file_name1):
     global reddit
 
     parent_ids = []
+    scores = []
+    ids=[]
+    times=[]
     counter = 0
 
     with open(file_name1, 'r') as read_obj:
@@ -217,6 +221,7 @@ def time_search(file_name1):
         for i in csv_reader:
             parent_ids.append(i)
             counter=counter+1
+            break
 
     print("\n\n\n\n")
     id_test = parent_ids[0]
@@ -228,26 +233,47 @@ def time_search(file_name1):
 
 
     while(True):
-
         for i in clean_id:
-            print(i)
             try:
                 submission = reddit.submission(id=i)
+                
                 print("\n\n----------------")
-                print(submission.title)
-                print(submission.subreddit)
-                print(submission.permalink)
+                print(i)
+                print("Title: ",submission.title)
+                print("subreddit: ",submission.subreddit)
+                print("link: ",submission.permalink)
                 print("score: ",submission.score)
-                print(counter," ==  counter number")
-                print("\n\n-----------------")
+                print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                print("\n")
+
+                ids.append(submission.id)
+                created_times.append(time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(submission.created)))
+                scores.append(submission.scor)
+                current_time.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+
             except Exception as e:
                 print(e)
                 print(str(e))
                 pass
         break
 
+        with open(output_file, 'w', encoding='UTF8') as f:
+            writer = csv.writer(f, dialect="excel")
+            writer.writerow(ids)
+            writer.writerow(scores)
+            writer.writerow(created_time)
+            writer.writerow(current_time)
+            
+
+            f.close()
+            print("\n\n-------------completed\nhave a good day man\n---\n")
+            break
+        print("donewefdfcf")
+        break
+
 
 # enter the delay of how ling you want the posts to grow for 
 # enter csv name for the file wanted
 
-time_search(file_name1="loppa.csv")
+time_search(file_name1="overnightrun.overnightrun.csv", output_file="overnightrun_export.csv")

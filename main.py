@@ -104,6 +104,12 @@ def streamingcomments(x):
 
 
 #####################################
+import csv
+from itertools import chain
+from datetime import datetime
+import sys
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def streamingpost(x,file_name,delay):
@@ -161,6 +167,7 @@ def streamingpost(x,file_name,delay):
                 is_video.append(i.is_video)
                 author.append(i.author)
                 spoiler.append(i.spoiler)
+                scores.append(i.score)
 
                 if i.over_18 == True:
                     counter_18 = counter_18 +1
@@ -173,6 +180,9 @@ def streamingpost(x,file_name,delay):
                 print("passed")
                 print(str(e))
                 pass
+        
+
+        
 
         if time.time()>close_time:
             with open(file_name, 'w', encoding='UTF8') as f:
@@ -195,7 +205,7 @@ def streamingpost(x,file_name,delay):
             break
     return print("the percentage of nsfw",float(counter_18/counter),"-------------\n\n")
 
-# streamingpost(x="all",file_name = "loppa.csv",delay = 1)
+# streamingpost(x="all",file_name = "loppa.csv",delay = 10)
 
 
 #       # pass in subreddit name and how many you want 
@@ -204,11 +214,37 @@ def streamingpost(x,file_name,delay):
         # 60 seconds = ~700 posts
 
 
-import csv
-from itertools import chain
-from datetime import datetime
-import sys
 
+
+def ploter(open_file):
+
+    scores = []
+    subs = []
+    holder = []
+
+    with open(open_file, 'r') as read_obj:
+        csv_reader = csv.reader(read_obj, delimiter="|")
+        for i in csv_reader:
+            holder.append(i)
+
+    tempvar = [elem.strip("[]").split(',') for elem in holder[1]]
+    scores = list(chain(*tempvar))
+
+    tempvar = [elem.strip("[]").split(',') for elem in holder[4]]
+    subs = list(chain(*tempvar))
+
+
+    plt.scatter(scores, subs,marker='o')
+    plt.xscale("log")
+    plt.yscale("log")
+    plt.xlabel("Scores")
+    plt.ylabel("Subscibers")
+    plt.show()
+
+ploter(open_file="boom.csv")
+
+
+########################################
 
 def time_search(file_name1,output_file):
     csv.field_size_limit(sys.maxsize)
@@ -220,6 +256,7 @@ def time_search(file_name1,output_file):
     created_time = []
     current_time = []
     subscribers =[]
+    scores_subs = []
     counter = 0
 
     with open(file_name1, 'r') as read_obj:
@@ -233,12 +270,12 @@ def time_search(file_name1,output_file):
     id_test = parent_ids[0]
     print("Running, Runnin, Runnin")
 
-# striping and cleaing the data
-# sub scriptiable with normal list notation list[0]
+    # striping and cleaing the data
+    # sub scriptiable with normal list notation list[0]
     tempvar = [elem.strip("[]").split(',') for elem in id_test]
     clean_id = list(chain(*tempvar))
 
-
+    # getting the data for the specific id and storing it
     while(True):
         for i in clean_id:
             try:
@@ -251,20 +288,34 @@ def time_search(file_name1,output_file):
                 print("link: ",submission.permalink)
                 print("score: ",submission.score)
                 print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                print("\n")
+                print("/n On to the next!!!!")
 
                 ids.append(submission.id)
                 created_time.append(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(submission.created)))
                 scores.append(submission.score)
                 current_time.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                subscribers.append(i.subreddit_subscribers)
+                subscribers.append(submission.subreddit_subscribers)
+
+                scores_subs.append(100*(submission.score/submission.subreddit_subscribers))
 
 
             except Exception as e:
                 print(e)
                 print(str(e))
                 pass
+        # this is outside the loop
+        print("done gathering")
+        # workin on ploting
+        # ploter(x=scores_subs)
 
+        plt.scatter(scores, subscribers,marker='o')
+        plt.xscale("log")
+        plt.yscale("log")
+        plt.xlabel("Scores")
+        plt.ylabel("Scores")
+        plt.show()
+
+        # storing results
         with open(output_file, 'w', encoding='UTF8') as f:
             writer = csv.writer(f, dialect="excel")
             writer.writerow(ids)
@@ -274,31 +325,51 @@ def time_search(file_name1,output_file):
             writer.writerow(subscribers)
             f.close()
             print("\n\n-------------completed\nhave a good day man\n---\n")
-            break
-        return print("counter: ", counter)
-
+        
+        return print("counter: ", counter,"\n\n\n",scores_subs)
 
 # enter the csv input and output
 # enter csv name for the file wanted
 
-time_search(file_name1="overnightrun.csv", output_file="overnightrun_export.csv")
+# time_search(file_name1="loppa.csv", output_file="boom.csv")
 
 
+######################################
 
 # now working on research data and displaying it
 
 import numpy
+import sys
 def reader(file_name):
     csv.field_size_limit(sys.maxsize)
     global reddit
 
+    parent_ids = []
+    counter = 0
 
-    with open(file_name1, 'r') as read_obj:
+
+    with open(file_name, 'r') as read_obj:
         csv_reader = csv.reader(read_obj, delimiter="|")
         for i in csv_reader:
             parent_ids.append(i)
             counter=counter+1
-            break
+
+    tempvar = [elem.strip("[]").split(',') for elem in parent_ids[0]]
+    clean_id = list(chain(*tempvar))
+
+    tempvar = [elem.strip("[]").split(',') for elem in parent_ids[9]]
+    clean_subs = list(chain(*tempvar))
+
+    for i in clean_id:
+        print(clean_id)
+        break
+        
+    for i in clean_subs:
+        print(clean_subs)
+        break
+
+            
+    print("\n\n\n----------------------------\n\n",counter)
 
 
-reader(file_name = "overnightrun.csv")
+# reader(file_name = "overnightrun.csv")

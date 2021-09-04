@@ -214,7 +214,7 @@ def reader(file_name):
     clean_subs = list(chain(*tempvar))
 
     for i in clean_id:
-        
+        break
 
             
     print(parent_ids)

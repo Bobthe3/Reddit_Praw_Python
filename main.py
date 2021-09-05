@@ -241,7 +241,7 @@ def ploter(open_file):
     plt.ylabel("Subscibers")
     plt.show()
 
-ploter(open_file="boom.csv")
+# ploter(open_file="boom.csv")
 
 
 ########################################
@@ -258,6 +258,7 @@ def time_search(file_name1,output_file):
     subscribers =[]
     scores_subs = []
     counter = 0
+    i_turn = 0
 
     with open(file_name1, 'r') as read_obj:
         csv_reader = csv.reader(read_obj, delimiter="|")
@@ -283,6 +284,8 @@ def time_search(file_name1,output_file):
                 
                 print("\n\n----------------")
                 print(i)
+                print(i_turn)
+                i_turn = i_turn + 1
                 print("Title: ",submission.title)
                 print("subreddit: ",submission.subreddit)
                 print("link: ",submission.permalink)
@@ -304,16 +307,20 @@ def time_search(file_name1,output_file):
                 print(str(e))
                 pass
         # this is outside the loop
+
         print("done gathering")
+        print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        print("\n\n")
+
         # workin on ploting
         # ploter(x=scores_subs)
 
-        plt.scatter(scores, subscribers,marker='o')
-        plt.xscale("log")
-        plt.yscale("log")
-        plt.xlabel("Scores")
-        plt.ylabel("Scores")
-        plt.show()
+        # plt.scatter(scores, subscribers,marker='o')
+        # plt.xscale("log")
+        # plt.yscale("log")
+        # plt.xlabel("Scores")
+        # plt.ylabel("Scores")
+        # plt.show()
 
         # storing results
         with open(output_file, 'w', encoding='UTF8') as f:
@@ -331,7 +338,7 @@ def time_search(file_name1,output_file):
 # enter the csv input and output
 # enter csv name for the file wanted
 
-# time_search(file_name1="loppa.csv", output_file="boom.csv")
+time_search(file_name1="overnightrun.csv", output_file="boom.csv")
 
 
 ######################################
